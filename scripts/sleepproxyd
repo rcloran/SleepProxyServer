@@ -5,8 +5,6 @@ gevent.monkey.patch_all()
 
 from functools import partial
 
-import avahi
-
 from sleepproxy import dnsserve, mdns, udp
 
 mdns.register_service(
@@ -15,7 +13,7 @@ mdns.register_service(
         'stype': '_sleep-proxy._udp',
         'domain': '',
         'host': '',
-        'protocol': avahi.PROTO_INET,  # TODO: Support IP6
+        'protocol': mdns.PROTO_INET,  # TODO: Support IP6
         'port': 3535,
     }
 )
