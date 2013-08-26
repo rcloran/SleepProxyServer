@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+import gevent.monkey
+gevent.monkey.patch_all()
+
+from functools import partial
+
+import avahi
+
+from sleepproxy import dnsserve, mdns, udp
+
+mdns.register_service(
+    {
+        'name': 'Sleep Proxy Server',
+        'stype': '_sleep-proxy._udp',
+        'domain': '',
+        'host': '',
+        'protocol': avahi.PROTO_INET,  # TODO: Support IP6
+        'port': 3535,
+    }
+)
+server = udp.DatagramServer(('0.0.0.0', 3535))
+server.set_handle(partial(dnsserve.handle, server))
+server.serve_forever()
